@@ -22,7 +22,7 @@ class RMSNorm(nn.Module):
         # 首先将输入x转为float类型，然后进行RMSNorm，最后再转回原来的数据类型
         # 最后乘以weight，这是RMSNorm的一个可学习的缩放因子
         output = self._norm(x.float()).type_as(x)
-        return output #* self.weight
+        return output * self.weight
 
 if __name__ == "__main__":
     from config.model_config import ModelConfig

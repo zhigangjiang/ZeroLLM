@@ -54,7 +54,7 @@ class Attention(nn.Module):
         self.dropout = args.dropout
 
         # 检查是否使用Flash Attention（需要PyTorch >= 2.0）。
-        self.flash =  hasattr(torch.nn.functional, 'scaled_dot_product_attention')
+        self.flash = hasattr(torch.nn.functional, 'scaled_dot_product_attention')
         if not self.flash:
             # 若不支持Flash Attention，则使用手动实现的注意力机制，并设置mask。
             print("WARNING: using slow attention. Flash Attention requires PyTorch >= 2.0")
