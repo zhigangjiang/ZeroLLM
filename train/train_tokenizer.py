@@ -177,11 +177,11 @@ def eval_tokenizer(tokenizer_path: str) -> None:
     print("Special tokens preserved:", decoded == test_text)
 
 if __name__ == "__main__":
-    data_file = "./src/dataset/seq_monkey_datawhale.jsonl"  # 替换为你的数据文件路径
-    save_directory = "/root/autodl-tmp/projects/happy-llm/ZeroLLM/src/tokenizer"  # 替换为保存tokenizer的路径
-
+    data_file = "/root/autodl-tmp/seq_monkey_datawhale.jsonl"  # 替换为你的数据文件路径
+    save_directory = "tokenizer_k_zero"  # 替换为保存tokenizer的路径
     # 训练tokenizer
     train_tokenizer(data_file, save_directory, vocab_size=6144)
 
+    save_directory = "tokenizer_k" # 使用训练好的tokenizer目录进行评估
     # 评估tokenizer
-    # eval_tokenizer(save_directory)
+    eval_tokenizer(save_directory)

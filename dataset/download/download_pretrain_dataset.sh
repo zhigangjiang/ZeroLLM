@@ -4,7 +4,7 @@
 export HF_ENDPOINT=https://hf-mirror.com
 
 # dataset dir 下载到本地目录
-dataset_dir="src/dataset"
+dataset_dir="/root/autodl-tmp"
 
 mkdir -p ${dataset_dir}
 
@@ -13,10 +13,3 @@ modelscope download --dataset ddzhu123/seq-monkey mobvoi_seq_monkey_general_open
 
 # 解压预训练数据集
 tar -xvf "${dataset_dir}/mobvoi_seq_monkey_general_open_corpus.jsonl.tar.bz2" -C "${dataset_dir}"
-
-# 下载SFT数据集
-huggingface-cli download \
-  --repo-type dataset \
-  --resume-download \
-  BelleGroup/train_3.5M_CN \
-  --local-dir "${dataset_dir}/BelleGroup"

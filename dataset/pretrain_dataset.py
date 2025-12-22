@@ -16,7 +16,7 @@ class PretrainDataset(Dataset):
             # self.data = f.readlines()
             for line in tqdm(f):
                 self.data.append(line)
-                if len(self.data) >= 1000000:  # 只加载前100万行，防止内存占用过高
+                if len(self.data) >= 10000000:  # 只加载前1000万行，防止内存占用过高
                     break
 
 
