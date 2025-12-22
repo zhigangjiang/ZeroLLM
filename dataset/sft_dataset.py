@@ -12,11 +12,11 @@ class SFTDataset(Dataset):
         self.padding = 0
         self.data = []
         with open(data_path, 'r', encoding='utf-8') as f:
-            # self.data = f.readlines()
-            for line in f:
-                self.data.append(line)
-                if len(self.data) >= 1000:  # 只加载前100万行，防止内存占用过高
-                    break
+            self.data = f.readlines()
+            # for line in f:
+            #     self.data.append(line)
+            #     if len(self.data) >= 1000:  # 只加载前100万行，防止内存占用过高
+            #         break
         
 
     def __len__(self):

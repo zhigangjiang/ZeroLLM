@@ -4,7 +4,7 @@
 export HF_ENDPOINT=https://hf-mirror.com
 
 # dataset dir 下载到本地目录
-dataset_dir="/root/autodl-tmp"
+dataset_dir="/root/autodl-tmp/dataset"
 
 mkdir -p ${dataset_dir}
 
