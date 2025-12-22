@@ -1,4 +1,11 @@
-# ZeroLLM
+<div align='center'>
+    <img src="./docs/images/head.jpg" alt="alt text" width="100%">
+    <h1>ZeroLLM</h1>
+</div>
+
+![]("./docs/images/head.jpg")
+参考教程[happy-llm](https://github.com/datawhalechina/happy-llm.git)
+
 从0搭建LLM(基于LLaMA2)
 
 ## 数据预处理
@@ -46,7 +53,7 @@ python train/train_tokenizer.py
 ``` bash
 nohup python ./train/pretrain.py --use_swanlab &
 ```
-> 在单卡NVIDIA RTX PRO 6000(96GB) 上，batchsize可以设置到128，实验默认使用64，且为快速验证仅用前1000万条数据（在`dataset/pretrain_dataset.py#17`修改）
+> 在单卡NVIDIA RTX PRO 6000(96GB) 上，batchsize可以设置到128，实验默认使用64，且为快速验证仅用`出门问问序列猴子开源数据集`前1000万条数据（在`dataset/pretrain_dataset.py#17`修改）
 
 ![pretrain_swanlab.png](docs/images/pretrain_swanlab.png)
 
@@ -67,6 +74,78 @@ Sample 2:
 --------------------
 ```
 ## 训练SFT模型
+``` bash
+nohup python ./train/sft_train.py --use_swanlab &
+```
+> 在单卡NVIDIA RTX PRO 6000(96GB) 上，batchsize可以设置到128，实验默认使用64，使用`BelleGroup`全部数据
 
 
-## 基于HF训练
+## 基于Qwen2.5-1.5B Base训练（微调）
+``` bash
+bash train/pretrain_Qwen2.5-1.5B.sh
+```
+或者
+``` bash
+# 设置可见显卡
+CUDA_VISIBLE_DEVICES=0
+
+deepspeed train/pretrain_Qwen2.5-1.5B.py \
+    --config_name /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/Qwen2.5-1.5B \
+    --tokenizer_name /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/Qwen2.5-1.5B \
+    --train_files /root/projects/happy-llm/ZeroLLM/autodl-tmp/dataset/seq_monkey_datawhale_small.jsonl \
+    --per_device_train_batch_size 2 \
+    --gradient_accumulation_steps 4 \
+    --do_train \
+    --output_dir /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/pretrain_Qwen2.5-1.5B/output \
+    --learning_rate 1e-4 \
+    --num_train_epochs 1 \
+    --warmup_steps 200 \
+    --logging_dir /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/pretrain_Qwen2.5-1.5B/logs \
+    --logging_strategy steps \
+    --logging_steps 5 \
+    --save_strategy steps \
+    --save_steps 100 \
+    --preprocessing_num_workers 10 \
+    --save_total_limit 1 \
+    --seed 12 \
+    --block_size 2048 \
+    --bf16 \
+    --gradient_checkpointing \
+    --deepspeed ./train/ds_config_zero2.json \
+    --report_to swanlab \
+    # --evaluation_strategy  no \
+```
+
+## 基于Qwen2.5-1.5B SFT训练
+``` bash
+bash train/sft_train_Qwen2.5-1.5B.sh
+```
+或者
+``` bash
+CUDA_VISIBLE_DEVICES=0,1
+
+deepspeed train/sft_train_Qwen2.5-1.5B.py \
+    --model_name_or_path /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/Qwen2.5-1.5B \
+    --train_files /root/projects/happy-llm/ZeroLLM/autodl-tmp/dataset/BelleGroup/train_3.5M_CN.json \
+    --per_device_train_batch_size 2 \
+    --gradient_accumulation_steps 4 \
+    --do_train \
+    --output_dir  /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/sft_train_Qwen2.5-1.5B/output \
+    --learning_rate 1e-4 \
+    --num_train_epochs 3 \
+    --warmup_steps 200 \
+    --logging_dir /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/sft_train_Qwen2.5-1.5B/logs \
+    --logging_strategy steps \
+    --logging_steps 5 \
+    --save_strategy steps \
+    --save_steps 100 \
+    --save_total_limit 1 \
+    --seed 12 \
+    --block_size 2048 \
+    --bf16 \
+    --gradient_checkpointing \
+    --deepspeed ./train/ds_config_zero2.json \
+    --report_to swanlab \
+    # --evaluation_strategy  no \
+    # --resume_from_checkpoint ${output_model}/checkpoint-20400 \
+```
