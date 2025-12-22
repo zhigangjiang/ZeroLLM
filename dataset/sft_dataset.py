@@ -17,13 +17,16 @@ class SFTDataset(Dataset):
                 self.data.append(line)
                 if len(self.data) >= 1000:  # 只加载前100万行，防止内存占用过高
                     break
-        self.a_sequence = self.tokenizer("<|im_start|>assistant\n")['input_ids']
-        self.im_end_id = self.tokenizer("<|im_end|>")['input_ids'][0]
+        
 
     def __len__(self):
         return len(self.data)
 
     def generate_loss_mask(self, input_ids):
+        if not hasattr(self, 'a_sequence'):
+            self.a_sequence = self.tokenizer("<|im_start|>assistant\n")['input_ids']
+            self.im_end_id = self.tokenizer("<|im_end|>")['input_ids'][0]
+
         # 生成 loss mask, 0 表示不计算损失, 1 表示计算损失
         mask = [0] * len(input_ids)
         # a_sequence = [3, 1074, 537, 500, 203]  # <|im_start|>assistant\n
@@ -81,8 +84,8 @@ class SFTDataset(Dataset):
     
 if __name__ == "__main__":
     from transformers import AutoTokenizer
-    tokenizer_path = "src/tokenizer_k"  # 替换为保存tokenizer的路径
-    data_path = "./src/dataset/BelleGroup/BelleGroup_sft.jsonl"  # 替换为你的数据文件路径
+    tokenizer_path = "tokenizer_k"  # 替换为保存tokenizer的路径
+    data_path = "/root/autodl-tmp/data/BelleGroup_sft.jsonl"  # 替换为你的数据文件路径
     # 示例用法
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
     dataset = SFTDataset(data_path=data_path, tokenizer=tokenizer, max_length=512)

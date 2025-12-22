@@ -87,6 +87,7 @@ class TextGenerator:
             with self.ctx:  # 进入自动混合精度的上下文（如果是 GPU 并使用 float16 时）
                 for k in range(num_samples):  # 循环生成指定数量的样本
                     y = self.model.generate(x, self.tokenizer.eos_token_id, max_new_tokens, temperature=temperature, top_k=top_k)  # 生成文本
+                    # y = self.model.generate_super(x, self.tokenizer.eos_token_id, max_new_tokens, temperature=temperature, top_k=top_k, num_beams=5)  # 生成文本
                     generated_texts.append(self.tokenizer.decode(y[0].tolist()))  # 解码生成的 token 序列为可读文本
         return generated_texts  # 返回生成的文本样本
 
@@ -127,29 +128,29 @@ class TextGenerator:
         return generated_texts  # 返回生成的文本样本
     
 if __name__ == "__main__":
-    print("------------------- Pretrain Sample ------------------- \n")
+    # print("------------------- Pretrain Sample ------------------- \n")
 
-    pretrain_prompt_datas = [
-        '<|im_start|>北京大学是',
-        '<|im_start|>中国矿业大学（北京）地球科学与测绘工程学院',
-    ]
+    # pretrain_prompt_datas = [
+    #     '<|im_start|>北京大学是',
+    #     '<|im_start|>中国矿业大学（北京）地球科学与测绘工程学院',
+    # ]
 
-    generator = TextGenerator(checkpoint='/root/autodl-tmp/base_model_215M/pretrain_1024_18_6144_step80000.pth')  # 初始化生成器
-    for i in range(len(pretrain_prompt_datas)):
-        samples = generator.pretrain_sample(start=pretrain_prompt_datas[i], num_samples=1, max_new_tokens=120, temperature=0.75)
-        print(f"\nSample {i+1}:\n{pretrain_prompt_datas[i]}{samples[0]}\n{'-'*20}")  # 打印生成的样本并用分隔线分割
+    # generator = TextGenerator(checkpoint='/root/autodl-tmp/base_model_215M/pretrain_1024_18_6144_step80000.pth')  # 初始化生成器
+    # for i in range(len(pretrain_prompt_datas)):
+    #     samples = generator.pretrain_sample(start=pretrain_prompt_datas[i], num_samples=1, max_new_tokens=120, temperature=0.75)
+    #     print(f"\nSample {i+1}:\n{pretrain_prompt_datas[i]}{samples[0]}\n{'-'*20}")  # 打印生成的样本并用分隔线分割
 
     print("\n ------------------- SFT Sample ------------------- \n")
 
-    # sft_prompt_datas = [
-    #     '你好呀',
-    #     "中国的首都是哪里？",
-    #     "1+12等于多少？",
-    #     "你是谁？"
-    # ]
-    # generator = TextGenerator(checkpoint='./sft_model_215M/sft_dim1024_layers18_vocab_size6144.pth')  # 初始化生成器
-    # for i in range(len(sft_prompt_datas)):
-    #     samples = generator.sft_sample(start=sft_prompt_datas[i], num_samples=1, max_new_tokens=128, temperature=0.6)
-    #     print(f"\nSample {i+1}:\nQuestion: {sft_prompt_datas[i]} \nAI answer: {samples[0]}\n{'-'*20}")  # 打印生成的样本并用分隔线分割
+    sft_prompt_datas = [
+        '你好呀',
+        "中国的首都是哪里？",
+        "1+12等于多少？",
+        "你是谁？"
+    ]
+    generator = TextGenerator(checkpoint='/root/autodl-tmp/sft_model_215M/pytorch_model.bin')  # 初始化生成器
+    for i in range(len(sft_prompt_datas)):
+        samples = generator.sft_sample(start=sft_prompt_datas[i], num_samples=1, max_new_tokens=128, temperature=0.6)
+        print(f"\nSample {i+1}:\nQuestion: {sft_prompt_datas[i]} \nAI answer: {samples[0]}\n{'-'*20}")  # 打印生成的样本并用分隔线分割
 
     

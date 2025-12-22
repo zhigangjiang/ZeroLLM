@@ -293,7 +293,14 @@ class Transformer(PreTrainedModel):
         # 返回得分最高的序列，只返回新生成的部分（去掉原始输入）
         # beams[0] 是最终得分最高的完整序列
         # [:, seq_len:] 切片只保留生成部分
-        return beams[0][:, seq_len:]
+        # 返回得分最高的序列，只返回新生成的部分（去掉原始输入）
+        output = beams[0][:, seq_len:]
+        
+        # 【新增】如果以 stop_id 结尾，将其移除，保持与 greedy_search 一致
+        if stop_id is not None and output.size(1) > 0 and output[0, -1] == stop_id:
+            output = output[:, :-1]
+            
+        return output
 
     @torch.inference_mode()
     def generate_super(self,
