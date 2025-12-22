@@ -35,7 +35,7 @@ python dataset/pre_process/deal_pretrain_dataset.py
 ``` bash
 python dataset/pre_process/deal_sft_dataset.py
 ```
-处理为
+处理为标注格式
 ## 训练Tokenizer
 > 可以直接使用训练好的Tokenizer，位于`./tokenizer_k`，跳过此步骤
 

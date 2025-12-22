@@ -13,9 +13,8 @@ from contextlib import nullcontext
 
 from transformers import AutoTokenizer
 
-from config.model_config import ModelConfig
-from modules.transformer import Transformer
-from dataset.pretrain_dataset import PretrainDataset
+from k_model import ModelConfig, Transformer
+from dataset import PretrainDataset
 
 import swanlab
 
@@ -221,7 +220,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tiny-LLM Pretraining")
     
     # 基础训练参数
-    parser.add_argument("--out_dir", type=str, default="/root/autodl-tmp/base_model_215M", help="模型输出目录")
+    parser.add_argument("--out_dir", type=str, default="base_model_215M", help="模型输出目录")
     parser.add_argument("--epochs", type=int, default=1, help="训练轮数")
     parser.add_argument("--batch_size", type=int, default=64, help="批次大小")
     parser.add_argument("--learning_rate", type=float, default=2e-4, help="学习率")
@@ -231,7 +230,7 @@ if __name__ == "__main__":
     # 实验跟踪和数据加载参数
     parser.add_argument("--use_swanlab", action="store_true", help="是否使用SwanLab进行实验跟踪")
     parser.add_argument("--num_workers", type=int, default=8, help="数据加载的工作进程数")
-    parser.add_argument("--data_path", type=str, default="/root/autodl-tmp/seq_monkey_datawhale.jsonl", help="训练数据路径")
+    parser.add_argument("--data_path", type=str, default="./seq_monkey_datawhale.jsonl", help="训练数据路径")
     
     # 训练优化参数
     parser.add_argument("--accumulation_steps", type=int, default=8, help="梯度累积步数")
@@ -261,7 +260,7 @@ if __name__ == "__main__":
     if args.use_swanlab:
         # 注意：使用前需要先登录 swanlab.login(api_key='your key')
         run = swanlab.init(
-            project="ZeroLLM",  # 项目名称
+            project="Happy-LLM",  # 项目名称
             experiment_name="Pretrain-215M",  # 实验名称
             config=args,  # 保存所有超参数
         )
