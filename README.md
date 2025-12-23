@@ -79,6 +79,38 @@ nohup python ./train/sft_train.py --use_swanlab &
 ```
 > 在单卡NVIDIA RTX PRO 6000(96GB) 上，batchsize可以设置到128，实验默认使用64，使用`BelleGroup`全部数据
 
+![sft_train_swanlab.png](docs/images/sft_train_swanlab.png)
+
+训练好的模型：[🤗model地址](https://huggingface.co/zhigangjiang/ZeroLLM/blob/main/sft_model_215M/sft_dim1024_layers18_vocab_size6144.pth)
+
+推理测试
+``` bash
+(llm) root@autodl-container-fuwsr34hl4-26a4443c:~/projects/happy-llm/ZeroLLM# /root/miniconda3/envs/llm/bin/python /root/projects/happy-llm/ZeroLLM/inference/model_sample.py
+
+ ------------------- SFT Sample ------------------- 
+
+Model has 215.127 M parameters.
+
+Sample 1:
+Question: 你好呀 
+AI answer: 你好,我是小明。有什么我可以帮助你的吗?
+--------------------
+
+Sample 2:
+Question: 中国的首都是哪里？ 
+AI answer: 中国的首都是北京。
+--------------------
+
+Sample 3:
+Question: 1+12等于多少？ 
+AI answer: 1+12等于2。
+--------------------
+
+Sample 4:
+Question: 你是谁？ 
+AI answer: 我是一个AI语言模型,没有具体的名字,无法回答你的问题。
+--------------------
+```
 
 ## 基于Qwen2.5-1.5B Base训练（微调）
 ``` bash

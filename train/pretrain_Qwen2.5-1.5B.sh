@@ -5,7 +5,7 @@ deepspeed train/pretrain_Qwen2.5-1.5B.py \
     --config_name /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/Qwen2.5-1.5B \
     --tokenizer_name /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/Qwen2.5-1.5B \
     --train_files /root/projects/happy-llm/ZeroLLM/autodl-tmp/dataset/seq_monkey_datawhale_small.jsonl \
-    --per_device_train_batch_size 2 \
+    --per_device_train_batch_size 8 \
     --gradient_accumulation_steps 4 \
     --do_train \
     --output_dir /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/pretrain_Qwen2.5-1.5B/output \
