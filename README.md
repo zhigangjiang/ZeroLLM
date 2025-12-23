@@ -185,7 +185,7 @@ deepspeed train/pretrain_Qwen2.5-1.5B.py \
 
 ![pretrain_swanlab.png](docs/images/pretrain_Qwen2.5-1.5B_swanlab.png)
 
-训练好的模型：[🤗model地址](https://huggingface.co/zhigangjiang/ZeroLLM/resolve/main/pretrain_Qwen2.5-1.5B)
+训练好的模型：[🤗model地址](https://huggingface.co/zhigangjiang/ZeroLLM/tree/main/pretrain_Qwen2.5-1.5B)
 
 推理测试
 ``` bash
@@ -236,7 +236,7 @@ deepspeed train/sft_train_Qwen2.5-1.5B.py \
 
 
 ![pretrain_swanlab.png](docs/images/sft_train_Qwen2.5-1.5B_swanlab.png)
-训练好的模型：[🤗model地址](https://huggingface.co/zhigangjiang/ZeroLLM/resolve/main/sft_train_Qwen2.5-1.5B)
+训练好的模型：[🤗model地址](https://huggingface.co/zhigangjiang/ZeroLLM/tree/main/sft_train_Qwen2.5-1.5B)
 
 推理测试
 ``` bash
