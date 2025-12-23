@@ -16,7 +16,7 @@ deepspeed train/pretrain_Qwen2.5-1.5B.py \
     --logging_strategy steps \
     --logging_steps 5 \
     --save_strategy steps \
-    --save_steps 100 \
+    --save_steps 390 \
     --preprocessing_num_workers 10 \
     --save_total_limit 1 \
     --seed 12 \

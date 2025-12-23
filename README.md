@@ -111,6 +111,39 @@ Question: 你是谁？
 AI answer: 我是一个AI语言模型,没有具体的名字,无法回答你的问题。
 --------------------
 ```
+## 加载测试Qwen2.5-1.5B
+下载模型
+```bash
+bash download/download_Qwen2.5-1.5B.sh
+```
+推理测试
+```bash
+(llm) root@autodl-container-fuwsr34hl4-26a4443c:~/projects/happy-llm# /root/miniconda3/envs/llm/bin/python /root/projects/happy-llm/ZeroLLM/inference/model_sample_Qwen2.5-1.5B.py
+------------------- Original Pretrain Sample ------------------- 
+
+Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+你好
+```
+由于没有经过SFT训练，对话效果差。
 
 ## 基于Qwen2.5-1.5B Base训练（微调）
 ``` bash
@@ -147,8 +180,25 @@ deepspeed train/pretrain_Qwen2.5-1.5B.py \
     --report_to swanlab \
     # --evaluation_strategy  no \
 ```
+> 在单卡NVIDIA RTX PRO 6000(96GB) 上，batchsize可以设置到8，实验默认使用8，且为快速验证仅用`出门问问序列猴子开源数据集`前100000条数据（在dataset/pre_process/process_dataset.ipynb修改）
+
+
+![pretrain_swanlab.png](docs/images/pretrain_Qwen2.5-1.5B_swanlab.png)
+
+训练好的模型：[🤗model地址](https://huggingface.co/zhigangjiang/ZeroLLM/resolve/main/pretrain_Qwen2.5-1.5B)
+
+推理测试
+``` bash
+(llm) root@autodl-container-fuwsr34hl4-26a4443c:~/projects/happy-llm/ZeroLLM# /root/miniconda3/envs/llm/bin/python /root/projects/happy-llm/ZeroLLM/inference/model_sample_Qwen2.5-1.5B.py
+------------------- Pretrain Sample ------------------- 
+
+，以“以“一、三、三、三、三、三、三、三、三、三、三、三、三、三、三、三、三、金
+```
+> 可能训练数据过少，一本正经乱说，
 
 ## 基于Qwen2.5-1.5B SFT训练
+Qwen2.5-1.5B已包含足够多知识，所以直接基于原版模型进行SFT训练
+
 ``` bash
 bash train/sft_train_Qwen2.5-1.5B.sh
 ```
@@ -181,3 +231,20 @@ deepspeed train/sft_train_Qwen2.5-1.5B.py \
     # --evaluation_strategy  no \
     # --resume_from_checkpoint ${output_model}/checkpoint-20400 \
 ```
+
+> 在单卡NVIDIA RTX PRO 6000(96GB) 上，batchsize可以设置到8，实验默认使用8，且为快速验证仅用`BelleGroup`数据集前10000条数据（在train/sft_train_Qwen2.5-1.5B.py#241修改）
+
+
+![pretrain_swanlab.png](docs/images/sft_train_Qwen2.5-1.5B_swanlab.png)
+训练好的模型：[🤗model地址](https://huggingface.co/zhigangjiang/ZeroLLM/resolve/main/sft_train_Qwen2.5-1.5B)
+
+推理测试
+``` bash
+(llm) root@autodl-container-fuwsr34hl4-26a4443c:~/projects/happy-llm# /root/miniconda3/envs/llm/bin/python /root/projects/happy-llm/ZeroLLM/inference/model_sample_Qwen2.5-1.5B.py
+
+ ------------------- SFT Sample ------------------- 
+
+你好，有什么我可以帮助你的吗？<|im_end|>
+<|endoftext|>
+```
+> 可以看到训练后对指令回答准确了，说明SFT训练有效果

@@ -3,7 +3,7 @@ CUDA_VISIBLE_DEVICES=0,1
 deepspeed train/sft_train_Qwen2.5-1.5B.py \
     --model_name_or_path /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/Qwen2.5-1.5B \
     --train_files /root/projects/happy-llm/ZeroLLM/autodl-tmp/dataset/BelleGroup/train_3.5M_CN.json \
-    --per_device_train_batch_size 16 \
+    --per_device_train_batch_size 8 \
     --gradient_accumulation_steps 4 \
     --do_train \
     --output_dir  /root/projects/happy-llm/ZeroLLM/autodl-tmp/model/sft_train_Qwen2.5-1.5B/output \
@@ -14,7 +14,7 @@ deepspeed train/sft_train_Qwen2.5-1.5B.py \
     --logging_strategy steps \
     --logging_steps 5 \
     --save_strategy steps \
-    --save_steps 100 \
+    --save_steps 900 \
     --save_total_limit 1 \
     --seed 12 \
     --block_size 2048 \
